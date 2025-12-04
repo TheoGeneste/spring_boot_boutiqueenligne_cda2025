@@ -1,0 +1,251 @@
+{
+	"info": {
+		"_postman_id": "53845ea2-a20d-41ec-9238-2669eacabad8",
+		"name": "BOUTIQUE EN LIGNE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20830465"
+	},
+	"item": [
+		{
+			"name": "CLIENTS",
+			"item": [
+				{
+					"name": "GET_CLIENTS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/clients",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_CLIENT",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/clients/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"clients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE_CLIENT",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"adresse\": \"15 Rue de Rivoli\",\r\n    \"codePostal\": \"75001\",\r\n    \"email\": \"Dupont.Jean2@entreprise.com\",\r\n    \"nom\": \"Dupont\",\r\n    \"prenom\": \"Jean\",\r\n    \"telephone\": \"0102030401\",\r\n    \"ville\": \"Paris\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/clients",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"clients"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "COMMANDES",
+			"item": [
+				{
+					"name": "GET_COMMANDES",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"adresse\": \"15 Rue de Rivoli\",\r\n    \"codePostal\": \"75001\",\r\n    \"email\": \"Dupont.Jean2@entreprise.com\",\r\n    \"nom\": \"Dupont\",\r\n    \"prenom\": \"Jean\",\r\n    \"telephone\": \"0102030401\",\r\n    \"ville\": \"Paris\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/commandes",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"commandes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE_COMMANDE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client\": {\r\n        \"adresse\": \"20 Rue de la République\",\r\n        \"codePostal\": \"69001\",\r\n        \"email\": \"Martin.Sophie@entreprise.com\",\r\n        \"id\": 2,\r\n        \"nom\": \"Martin\",\r\n        \"prenom\": \"Sophie\",\r\n        \"telephone\": \"0607080910\",\r\n        \"ville\": \"Lyon\"\r\n    },\r\n    \"paiement\":     {\r\n        \"date\": \"2024-01-01\",\r\n        \"id\": 12,\r\n        \"method\": \"Carte de Crédit\",\r\n        \"montant\": 499.99\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/commandes",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"commandes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE_COMMANDE",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client\": {\r\n        \"adresse\": \"10 Rue de Rivoli\",\r\n        \"codePostal\": \"75001\",\r\n        \"email\": \"Dupont.Jean@entreprise.com\",\r\n        \"id\": 1,\r\n        \"nom\": \"Dupont\",\r\n        \"prenom\": \"Jean\",\r\n        \"telephone\": \"0102030405\",\r\n        \"ville\": \"Paris\"\r\n    },\r\n    \"paiement\": {\r\n        \"date\": \"2024-01-01\",\r\n        \"id\": 12,\r\n        \"method\": \"Carte de Crédit\",\r\n        \"montant\": 499.99\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/commandes/15",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"commandes",
+								"15"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PAIEMENTS",
+			"item": [
+				{
+					"name": "GET_PAIEMENTS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"adresse\": \"15 Rue de Rivoli\",\r\n    \"codePostal\": \"75001\",\r\n    \"email\": \"Dupont.Jean2@entreprise.com\",\r\n    \"nom\": \"Dupont\",\r\n    \"prenom\": \"Jean\",\r\n    \"telephone\": \"0102030401\",\r\n    \"ville\": \"Paris\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/paiements",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"paiements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE_PAIEMENT",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\": \"2024-01-01\",\r\n    \"method\": \"Carte de Crédit\",\r\n    \"montant\": 499.99\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/paiements",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"paiements"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": ""
+		}
+	]
+}
