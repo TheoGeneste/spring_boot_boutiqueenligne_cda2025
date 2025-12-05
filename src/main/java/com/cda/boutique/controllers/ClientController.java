@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cda.boutique.dtos.ClientRequestDTO;
+import com.cda.boutique.dtos.ClientResponseDTO;
 import com.cda.boutique.entites.Client;
 import com.cda.boutique.services.ClientService;
 
@@ -28,25 +30,24 @@ public class ClientController {
 
 
     @GetMapping
-    public ResponseEntity<List<Client>> getClients(){
+    public ResponseEntity<List<ClientResponseDTO>> getClients(){
         return ResponseEntity.ok(clientService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getClient(@PathVariable("id") Integer id){
+    public ResponseEntity<ClientResponseDTO> getClient(@PathVariable("id") Integer id){
         return ResponseEntity.ok(clientService.find(id));
     }
     
     @PostMapping
-    public ResponseEntity<String> addClient(@RequestBody Client client){
+    public ResponseEntity<String> addClient(@RequestBody ClientRequestDTO client){
         clientService.save(client);
         return ResponseEntity.ok("{\"message\": \"Client à bien été ajouté\"}");
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateClient(@PathVariable("id") Integer id,@RequestBody Client client){
-        client.setId(id);
-        clientService.save(client);
+    public ResponseEntity<String> updateClient(@PathVariable("id") Integer id,@RequestBody ClientRequestDTO client){
+        clientService.update(id,client);
         return ResponseEntity.ok("{\"message\": \"Client à bien été modifié\"}");
     }
 

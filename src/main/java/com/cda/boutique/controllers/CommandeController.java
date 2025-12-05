@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cda.boutique.entites.Commande;
+import com.cda.boutique.dtos.CommandeRequestDTO;
+import com.cda.boutique.dtos.CommandeResponseDTO;
 import com.cda.boutique.services.CommandeService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,25 +27,24 @@ public class CommandeController {
     private final CommandeService commandeService;
 
     @GetMapping
-    public ResponseEntity<List<Commande>> getCommandes(){
+    public ResponseEntity<List<CommandeResponseDTO>> getCommandes(){
         return ResponseEntity.ok(commandeService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Commande> getCommande(@PathVariable("id") Integer id){
+    public ResponseEntity<CommandeResponseDTO> getCommande(@PathVariable("id") Integer id){
         return ResponseEntity.ok(commandeService.find(id));
     }
     
     @PostMapping
-    public ResponseEntity<String> addCommande(@RequestBody Commande commande){
+    public ResponseEntity<String> addCommande(@RequestBody CommandeRequestDTO commande){
         commandeService.save(commande);
         return ResponseEntity.ok("{\"message\": \"Commande à bien été ajouté\"}");
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateCommande(@PathVariable("id") Integer id,@RequestBody Commande commande){
-        commande.setId(id);
-        commandeService.save(commande);
+    public ResponseEntity<String> updateCommande(@PathVariable("id") Integer id,@RequestBody CommandeRequestDTO commande){
+        commandeService.update(id,commande);
         return ResponseEntity.ok("{\"message\": \"Commande à bien été modifié\"}");
     }
 
