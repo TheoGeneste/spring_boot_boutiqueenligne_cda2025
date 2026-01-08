@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cda.boutique.entites.Paiement;
+import com.cda.boutique.dtos.PaiementRequestDTO;
+import com.cda.boutique.dtos.PaiementResponseDTO;
 import com.cda.boutique.services.PaiementService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,25 +27,25 @@ public class PaiementController {
     private final PaiementService paiementService;
 
     @GetMapping
-    public ResponseEntity<List<Paiement>> getPaiements(){
+    public ResponseEntity<List<PaiementResponseDTO>> getPaiements(){
         return ResponseEntity.ok(paiementService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Paiement> getPaiement(@PathVariable("id") Integer id){
+    public ResponseEntity<PaiementResponseDTO> getPaiement(@PathVariable("id") Integer id){
         return ResponseEntity.ok(paiementService.find(id));
     }
     
     @PostMapping
-    public ResponseEntity<String> addPaiement(@RequestBody Paiement paiement){
+    public ResponseEntity<String> addPaiement(@RequestBody PaiementRequestDTO paiement){
         paiementService.save(paiement);
         return ResponseEntity.ok("{\"message\": \"Paiement à bien été ajouté\"}");
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePaiement(@PathVariable("id") Integer id,@RequestBody Paiement paiement){
-        paiement.setId(id);
-        paiementService.save(paiement);
+    public ResponseEntity<String> updatePaiement(@PathVariable("id") Integer id,@RequestBody PaiementRequestDTO paiement){
+
+        paiementService.update(id,paiement);
         return ResponseEntity.ok("{\"message\": \"Paiement à bien été modifié\"}");
     }
 

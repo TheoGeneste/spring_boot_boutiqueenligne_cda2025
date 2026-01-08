@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.cda.boutique.dtos.AppartenirRequestDTO;
+import com.cda.boutique.dtos.AppartenirResponseDTO;
 import com.cda.boutique.entites.Appartenir;
 import com.cda.boutique.entites.AppartenirID;
+import com.cda.boutique.mappers.AppartenirMapper;
 import com.cda.boutique.repositories.AppartenirRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -15,22 +18,23 @@ import lombok.RequiredArgsConstructor;
 public class AppartenirService {
     
     private final AppartenirRepository appartenirRepository;
+    private final AppartenirMapper appartenirMapper;
 
-    public List<Appartenir> findAll(){
+    public List<AppartenirResponseDTO> findAll(){
         List<Appartenir> appartenirs = appartenirRepository.findAll();
-        return appartenirs;
+        return appartenirMapper.toDTO(appartenirs);
     }
 
-    public Appartenir find(Integer produitId,Integer categorieId){
+    public AppartenirResponseDTO find(Integer produitId,Integer categorieId){
         Appartenir appartenir = null;
         if (appartenirRepository.findById(new AppartenirID(produitId, categorieId)).isPresent()) {
             appartenir = appartenirRepository.findById(new AppartenirID(produitId, categorieId)).get();
         }
-        return appartenir;
+        return appartenirMapper.toDTO(appartenir);
     }
 
-    public void save(Appartenir appartenir){
-        appartenirRepository.save(appartenir);
+    public void save(AppartenirRequestDTO appartenir){
+        appartenirRepository.save(appartenirMapper.toEntity(appartenir));
     }
 
     public void remove(Integer produitId, Integer categorieId){

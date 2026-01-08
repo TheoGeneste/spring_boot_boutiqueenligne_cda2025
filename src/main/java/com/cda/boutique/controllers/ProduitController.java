@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cda.boutique.entites.Produit;
+import com.cda.boutique.dtos.ProduitDTO;
+import com.cda.boutique.dtos.ProduitRequestDTO;
 import com.cda.boutique.services.ProduitService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,25 +29,24 @@ public class ProduitController {
 
 
     @GetMapping
-    public ResponseEntity<List<Produit>> getProduits(){
+    public ResponseEntity<List<ProduitDTO>> getProduits(){
         return ResponseEntity.ok(produitService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produit> getProduit(@PathVariable("id") Integer id){
+    public ResponseEntity<ProduitDTO> getProduit(@PathVariable("id") Integer id){
         return ResponseEntity.ok(produitService.find(id));
     }
     
     @PostMapping
-    public ResponseEntity<String> addProduit(@RequestBody Produit produit){
+    public ResponseEntity<String> addProduit(@RequestBody ProduitRequestDTO produit){
         produitService.save(produit);
         return ResponseEntity.ok("{\"message\": \"Produit à bien été ajouté\"}");
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateProduit(@PathVariable("id") Integer id,@RequestBody Produit produit){
-        produit.setId(id);
-        produitService.save(produit);
+    public ResponseEntity<String> updateProduit(@PathVariable("id") Integer id,@RequestBody ProduitRequestDTO produit){
+        produitService.update(produit, id);
         return ResponseEntity.ok("{\"message\": \"Produit à bien été modifié\"}");
     }
 

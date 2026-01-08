@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cda.boutique.dtos.ContenirRequestDTO;
+import com.cda.boutique.dtos.ContenirResponseDTO;
 import com.cda.boutique.entites.Contenir;
 import com.cda.boutique.services.ContenirService;
 
@@ -28,23 +30,23 @@ public class ContenirController {
 
 
     @GetMapping
-    public ResponseEntity<List<Contenir>> getContenirs(){
+    public ResponseEntity<List<ContenirResponseDTO>> getContenirs(){
         return ResponseEntity.ok(contenirService.findAll());
     }
 
     @GetMapping("/{produitId}/{commandeId}")
-    public ResponseEntity<Contenir> getContenir(@PathVariable("produitId") Integer produitId,@PathVariable("commandeId") Integer commandeId){
+    public ResponseEntity<ContenirResponseDTO> getContenir(@PathVariable("produitId") Integer produitId,@PathVariable("commandeId") Integer commandeId){
         return ResponseEntity.ok(contenirService.find(produitId, commandeId));
     }
     
     @PostMapping
-    public ResponseEntity<String> addContenir(@RequestBody Contenir contenir){
+    public ResponseEntity<String> addContenir(@RequestBody ContenirRequestDTO contenir){
         contenirService.save(contenir);
         return ResponseEntity.ok("{\"message\": \"Contenir à bien été ajouté\"}");
     }
 
     @PutMapping()
-    public ResponseEntity<String> updateContenir(@RequestBody Contenir contenir){
+    public ResponseEntity<String> updateContenir(@RequestBody ContenirRequestDTO contenir){
         contenirService.save(contenir);
         return ResponseEntity.ok("{\"message\": \"Contenir à bien été modifié\"}");
     }

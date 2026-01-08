@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cda.boutique.dtos.ClientRequestDTO;
 import com.cda.boutique.dtos.ClientResponseDTO;
-import com.cda.boutique.entites.Client;
 import com.cda.boutique.services.ClientService;
 
 import lombok.RequiredArgsConstructor;
