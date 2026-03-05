@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Cours Java & Architecture du projet Spring Boutique</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: #111827;
+            color: #e5e7eb;
+        }
+        .slides-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 70px 110px;
+            background: radial-gradient(circle at top left, #1f2937, #020617);
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .slide.active {
+            display: flex;
+        }
+        h1, h2, h3 {
+            color: #60a5fa;
+            margin-top: 0;
+        }
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 0.3em;
+        }
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.4em;
+        }
+        h3 {
+            font-size: 1.8rem;
+            margin-top: 1.4em;
+        }
+        ul {
+            margin-left: 1.5em;
+            font-size: 1.3rem;
+        }
+        li + li {
+            margin-top: 0.3em;
+        }
+        code {
+            background: #111827;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 0.95em;
+            color: #f97316;
+        }
+        pre.schema {
+            background: #020617;
+            color: #e5e7eb;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 1.1rem;
+            border: 1px solid #1f2937;
+        }
+        pre.code-snippet {
+            background: #020617;
+            color: #e5e7eb;
+            padding: 12px 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 1.15rem;
+            border: 1px solid #1f2937;
+        }
+        .small {
+            font-size: 1.05rem;
+            color: #9ca3af;
+        }
+        .footer {
+            position: absolute;
+            bottom: 16px;
+            left: 80px;
+            right: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .nav-button {
+            background: #1f2937;
+            color: #e5e7eb;
+            border: 1px solid #374151;
+            border-radius: 999px;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .nav-button:hover {
+            background: #374151;
+        }
+        .help {
+            position: absolute;
+            top: 16px;
+            right: 24px;
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+<div class="slides-container">
+    <div class="help">Flèches gauche/droite ou clic sur les boutons pour naviguer</div>
+
+    <!-- DIAPO 1 : Titre -->
+    <section class="slide active">
+        <h1>Java & Architecture Spring Boutique</h1>
+        <h2>Typage, POO & Architecture en couches</h2>
+        <p>
+            Objectifs du cours :
+        </p>
+        <ul>
+            <li>Revoir le <strong>typage en Java</strong> (primitifs, références, génériques).</li>
+            <li>Comprendre la <strong>POO en Java</strong> (classes, objets, encapsulation, héritage, polymorphisme).</li>
+            <li>Analyser l’<strong>architecture du projet Spring “boutique”</strong> et le rôle de chaque package :
+                <code>config</code>, <code>controllers</code>, <code>dtos</code>, <code>entites</code>, <code>mappers</code>, <code>repositories</code>, <code>services</code>.
+            </li>
+        </ul>
+        <p class="small">Projet étudié : application Spring Boot de gestion de boutique (clients, produits, commandes, paiements…).</p>
+    </section>
+
+    <!-- DIAPO 2 : Rappel - Typage statique -->
+    <section class="slide">
+        <h2>Rappel : le typage en Java</h2>
+        <h3>Typage statique et fort</h3>
+        <ul>
+            <li><strong>Typage statique</strong> : le type des variables est connu à la compilation.
+                <ul>
+                    <li>Ex : <code>int age = 25;</code>, <code>String nom = "Dupont";</code></li>
+                    <li>Les erreurs de type sont détectées à la <strong>compilation</strong> (et non à l’exécution).</li>
+                </ul>
+            </li>
+            <li><strong>Typage fort</strong> : Java ne convertit pas les types “magiquement”.
+                <ul>
+                    <li>On doit faire des <strong>casts explicites</strong> ou utiliser des méthodes de conversion.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>Avantages</h3>
+        <ul>
+            <li><strong>Sécurité</strong> : moins d’erreurs de type à l’exécution.</li>
+            <li><strong>Lisibilité</strong> : le type exprime l’intention du développeur.</li>
+            <li><strong>Outils</strong> : meilleure autocomplétion et refactorings dans l’IDE.</li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 3 : Types primitifs et références -->
+    <section class="slide">
+        <h2>Types primitifs et types références</h2>
+        <h3>Types primitifs</h3>
+        <ul>
+            <li><strong>Numériques entiers</strong> : <code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code></li>
+            <li><strong>Numériques flottants</strong> : <code>float</code>, <code>double</code></li>
+            <li><strong>Booléen</strong> : <code>boolean</code></li>
+            <li><strong>Caractère</strong> : <code>char</code></li>
+            <li>Stockés directement en mémoire, taille fixe, très performants.</li>
+        </ul>
+        <h3>Types références (objets)</h3>
+        <ul>
+            <li><strong>Classes</strong> : <code>String</code>, <code>Client</code>, <code>Commande</code>, etc.</li>
+            <li><strong>Interfaces</strong> et types abstraits.</li>
+            <li><strong>Collections</strong> : <code>List&lt;Produit&gt;</code>, <code>Map&lt;K,V&gt;</code>, etc.</li>
+            <li>Les variables contiennent une <strong>référence</strong> vers l’objet dans le tas (heap).</li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 4 : Génériques -->
+    <section class="slide">
+        <h2>Les génériques en Java</h2>
+        <ul>
+            <li><strong>But</strong> : avoir un code réutilisable et <strong>typé</strong> (collections, services, mappers).</li>
+            <li>Exemple simple :
+                <ul>
+                    <li><code>List&lt;String&gt; noms = new ArrayList&lt;&gt;();</code></li>
+                    <li>La liste ne contiendra que des <code>String</code>.</li>
+                </ul>
+            </li>
+            <li>Dans un projet Spring, on les retrouve partout :
+                <ul>
+                    <li>Interfaces Spring Data : <code>JpaRepository&lt;Client, Long&gt;</code></li>
+                    <li>DTOs paramétrés (si besoin) et méthodes de services génériques.</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 5 : POO en Java - Bases -->
+    <section class="slide">
+        <h2>POO en Java : concepts de base</h2>
+        <ul>
+            <li><strong>Classe</strong> : “plan de construction” décrivant un type d’objet.
+                <ul>
+                    <li>Ex : <code>Client</code>, <code>Produit</code>, <code>Commande</code> dans ton package <code>entites</code>.</li>
+                </ul>
+            </li>
+            <li><strong>Objet</strong> : instance concrète d’une classe.
+                <ul>
+                    <li>Ex : un client précis : <code>new Client("Durand", "Alice")</code>.</li>
+                </ul>
+            </li>
+            <li><strong>Méthodes</strong> : actions que l’objet peut réaliser.</li>
+            <li><strong>Attributs</strong> : données que l’objet transporte (nom, prix, date, etc.).</li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 6 : Encapsulation / Héritage / Polymorphisme -->
+    <section class="slide">
+        <h2>POO en Java : principes clés</h2>
+
+        <h3>Encapsulation</h3>
+        <ul>
+            <li>Masquer les détails internes de la classe et exposer une interface propre.</li>
+            <li>Pratique :
+                <ul>
+                    <li>Attributs <code>private</code></li>
+                    <li>Accesseurs <code>getters</code> / <code>setters</code></li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Héritage</h3>
+        <ul>
+            <li>Une classe peut <strong>hériter</strong> d’une autre : <code>class ProduitEnPromo extends Produit</code></li>
+            <li>Permet de factoriser le code commun.</li>
+        </ul>
+
+        <h3>Polymorphisme</h3>
+        <ul>
+            <li>La même méthode peut se comporter différemment selon l’objet concret.</li>
+            <li>Ex : une méthode <code>afficherInfos()</code> sur <code>Client</code> et sur <code>Produit</code> sera appelée de la même façon
+                mais n’aura pas le même comportement.</li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 7 : POO et Spring -->
+    <section class="slide">
+        <h2>POO & Spring dans le projet “boutique”</h2>
+        <ul>
+            <li>Spring repose fortement sur la POO :
+                <ul>
+                    <li><strong>Classes</strong> annotées (<code>@Controller</code>, <code>@Service</code>, <code>@Entity</code>…).</li>
+                    <li><strong>Interfaces</strong> pour les repos (<code>AppartenirRepository</code>, <code>ClientRepository</code>, etc.).</li>
+                    <li><strong>Injection de dépendances</strong> (DI) pour composer les objets entre eux.</li>
+                </ul>
+            </li>
+            <li>Ton projet est organisé en <strong>couches</strong> (architecture en couches).</li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 8 : Vue d'ensemble du projet -->
+    <section class="slide">
+        <h2>Architecture globale du projet “boutique”</h2>
+        <p><strong>Packages principaux :</strong></p>
+        <ul>
+            <li><code>config</code> : configuration de l’application (par ex. <code>SecurityConfig</code>).</li>
+            <li><code>controllers</code> : exposition des API REST (couche présentation / web).</li>
+            <li><code>dtos</code> : objets échangés avec le client (front-end, Postman, etc.).</li>
+            <li><code>entites</code> : modèles métier persistés en base de données.</li>
+            <li><code>mappers</code> : conversion entre <code>entites</code> et <code>dtos</code>.</li>
+            <li><code>repositories</code> : accès aux données (DAO) via Spring Data JPA.</li>
+            <li><code>services</code> : logique métier, orchestration des opérations.</li>
+            <li><code>BoutiqueApplication</code> : classe de démarrage Spring Boot.</li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 9 : Détail - config -->
+    <section class="slide">
+        <h2>Package <code>config</code></h2>
+        <p>Exemple : <code>SecurityConfig.java</code></p>
+        <ul>
+            <li>Configure la <strong>sécurité</strong> Spring (Spring Security) :
+                <ul>
+                    <li>Gestion de l’authentification / autorisation (qui peut faire quoi).</li>
+                    <li>Configuration des filtres, des règles pour les URLs (ex : <code>/api/admin/**</code> protégé).</li>
+                    <li>Stratégies de mot de passe, CORS, etc. (selon ta config réelle).</li>
+                </ul>
+            </li>
+            <li>But : <strong>centraliser</strong> les réglages techniques pour ne pas les mélanger avec la logique métier.</li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 10 : Détail - controllers -->
+    <section class="slide">
+        <h2>Package <code>controllers</code></h2>
+        <p>Exemples : <code>ClientController</code>, <code>ProduitController</code>, <code>CommandeController</code>, etc.</p>
+        <ul>
+            <li>Couche la plus proche du <strong>client HTTP</strong> (navigateur, Postman, front Angular/React...).</li>
+            <li>Responsabilités :
+                <ul>
+                    <li>Exposer des <strong>endpoints REST</strong> (ex: <code>GET /clients</code>, <code>POST /produits</code>).</li>
+                    <li>Recevoir les données en <strong>DTOs de requête</strong> (ex : <code>ClientRequestDTO</code>).</li>
+                    <li>Appeler les <strong>services</strong> pour effectuer les opérations métier.</li>
+                    <li>Retourner des <strong>DTOs de réponse</strong> (ex : <code>ClientResponseDTO</code>, <code>CommandeResponseDTO</code>).</li>
+                </ul>
+            </li>
+            <li>Ne doivent <strong>pas</strong> contenir de logique métier complexe : ils déléguent aux services.</li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 11 : Détail - dtos -->
+    <section class="slide">
+        <h2>Package <code>dtos</code> (exemple avec ClientDTO)</h2>
+        <p>Exemples : <code>ClientDTO</code>, <code>ClientRequestDTO</code>, <code>ClientResponseDTO</code>, <code>ProduitRequestDTO</code>, etc.</p>
+        <ul>
+            <li><strong>DTO</strong> = Data Transfer Object.</li>
+            <li>Objets utilisés pour <strong>transporter des données</strong> entre :
+                <ul>
+                    <li>Le client (front) et le serveur (controller).</li>
+                    <li>Différentes couches internes, si nécessaire.</li>
+                </ul>
+            </li>
+        </ul>
+        <p>Dans ton projet, <code>ClientDTO</code> est un <strong>record</strong> Java :</p>
+        <pre class="code-snippet">
+public record ClientDTO(
+    String nom,
+    String prenom,
+    String ville,
+    String codePostal,
+    String adresse,
+    String email,
+    String telephone
+) {}
+        </pre>
+        <ul>
+            <li>Ce record représente un <strong>client</strong> tel qu’il est exposé par l’API (couche DTO), pas forcément exactement comme dans l’entité.</li>
+            <li>Le typage fort garantit :
+                <ul>
+                    <li>Que chaque champ est bien du bon type (<code>String</code> pour <code>email</code>, <code>telephone</code>, etc.).</li>
+                    <li>Que les méthodes qui manipulent un <code>ClientDTO</code> ne peuvent pas se tromper de structure.</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 12 : Détail - entites -->
+    <section class="slide">
+        <h2>Package <code>entites</code></h2>
+        <p>Exemples : <code>Client</code>, <code>Produit</code>, <code>Commande</code>, <code>Paiement</code>, <code>Categorie</code>, etc.</p>
+        <ul>
+            <li>Représentent les <strong>objets métier</strong> persistés en base de données.</li>
+            <li>Annotées avec <code>@Entity</code>, <code>@Id</code>, <code>@ManyToOne</code>, etc. (JPA/Hibernate).</li>
+            <li>Contiennent :
+                <ul>
+                    <li>Les attributs métier (nom, prix, stock, date, etc.).</li>
+                    <li>Les relations (ex : un <code>Produit</code> appartient à une <code>Categorie</code>).</li>
+                </ul>
+            </li>
+            <li>Directement gérées par les <strong>repositories</strong> pour la persistance.</li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 13 : Détail - mappers -->
+    <section class="slide">
+        <h2>Package <code>mappers</code></h2>
+        <p>Exemples : <code>ClientMapper</code>, <code>ProduitMapper</code>, <code>CommandeMapper</code>, etc.</p>
+        <ul>
+            <li>Responsables de la <strong>conversion</strong> entre :
+                <ul>
+                    <li><strong>Entités</strong> &lt;=&gt; <strong>DTOs</strong></li>
+                </ul>
+            </li>
+            <li>Intérêts :
+                <ul>
+                    <li>Centraliser la logique de mapping dans un seul endroit.</li>
+                    <li>Éviter de répéter le même code dans les controllers ou services.</li>
+                    <li>Faciliter l’évolution du modèle (ajout/suppression d’attributs, renommages).</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 14 : Détail - repositories -->
+    <section class="slide">
+        <h2>Package <code>repositories</code></h2>
+        <p>Exemples : <code>ClientRepository</code>, <code>ProduitRepository</code>, <code>CommandeRepository</code>, etc.</p>
+        <ul>
+            <li>Interfaces Spring Data (souvent <code>extends JpaRepository&lt;Entite, TypeId&gt;</code>).</li>
+            <li>Représentent la couche <strong>d’accès aux données</strong> (DAO).</li>
+            <li>Responsabilités :
+                <ul>
+                    <li>CRUD : <code>save</code>, <code>findById</code>, <code>findAll</code>, <code>deleteById</code>, etc.</li>
+                    <li>Requêtes dérivées des noms de méthode (ex : <code>findByEmail</code>).</li>
+                </ul>
+            </li>
+            <li>Spring génère l’implémentation automatiquement, tu codes surtout l’<strong>interface</strong>.</li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 15 : Détail - services -->
+    <section class="slide">
+        <h2>Package <code>services</code></h2>
+        <p>Exemples : <code>ClientService</code>, <code>ProduitService</code>, <code>CommandeService</code>, etc.</p>
+        <ul>
+            <li>Contiennent la <strong>logique métier</strong> de l’application.</li>
+            <li>Responsabilités :
+                <ul>
+                    <li>Valider les données, appliquer les règles métier.</li>
+                    <li>Appeler un ou plusieurs <strong>repositories</strong>.</li>
+                    <li>Utiliser les <strong>mappers</strong> pour passer de DTO à entité et inversement.</li>
+                </ul>
+            </li>
+            <li>Les controllers appellent les services, les services appellent les repositories.</li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 16 : Flux complet d'une requête -->
+    <section class="slide">
+        <h2>Schéma : flux d’une requête dans le projet</h2>
+        <p>Exemple : création d’un client ou d’un produit.</p>
+        <pre class="schema">
+[ Client HTTP (navigateur / Postman / front) ]
+                    |
+                    v
+        +---------------------------+
+        |   controllers             |
+        |   (ex: ClientController) |
+        +---------------------------+
+                    |
+        (reçoit un ClientRequestDTO)
+                    |
+                    v
+        +---------------------------+
+        |   services                |
+        |   (ex: ClientService)    |
+        +---------------------------+
+                    |
+        (utilise ClientMapper pour
+         passer de DTO -> Entité)
+                    |
+                    v
+        +---------------------------+
+        |   entites                 |
+        |   (ex: Client)           |
+        +---------------------------+
+                    |
+                    v
+        +---------------------------+
+        |   repositories            |
+        |   (ex: ClientRepository) |
+        +---------------------------+
+                    |
+        (persistance en base de données)
+                    |
+                    v
+        +---------------------------+
+        |   services                |
+        +---------------------------+
+                    |
+        (Entité -> ClientResponseDTO via mapper)
+                    |
+                    v
+        +---------------------------+
+        |   controllers             |
+        +---------------------------+
+                    |
+        (renvoie le DTO au client HTTP)
+                    v
+[ Réponse JSON vers le front ]
+        </pre>
+    </section>
+
+    <!-- DIAPO 17 : Lien avec la POO et le typage -->
+    <section class="slide">
+        <h2>POO & typage dans cette architecture</h2>
+        <ul>
+            <li>Chaque couche est composée de <strong>classes Java typées</strong> :
+                <ul>
+                    <li><code>ClientService</code> dépend de <code>ClientRepository</code>, <code>ClientMapper</code> et des différents <code>DTOs</code>.</li>
+                    <li>Les relations entre objets (services, repos, entités) sont des <strong>dépendances typées</strong>.</li>
+                </ul>
+            </li>
+            <li>La POO permet de :
+                <ul>
+                    <li>Modéliser clairement le <strong>métier</strong> (entités).</li>
+                    <li>Isoler les <strong>responsabilités</strong> (controllers vs services vs repositories).</li>
+                    <li>Réutiliser le code (mappers, services partagés, etc.).</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <!-- DIAPO 18 : Conclusion -->
+    <section class="slide">
+        <h2>Conclusion</h2>
+        <ul>
+            <li>Java fournit un <strong>typage statique fort</strong> qui sécurise le développement.</li>
+            <li>La <strong>POO</strong> (classes, objets, encapsulation, héritage, polymorphisme) est au cœur de Java et de Spring.</li>
+            <li>Ton projet “boutique” illustre une <strong>architecture en couches</strong> claire :
+                <ul>
+                    <li><code>config</code> pour la configuration technique.</li>
+                    <li><code>controllers</code> pour les endpoints REST.</li>
+                    <li><code>dtos</code>, <code>entites</code>, <code>mappers</code> pour structurer les données.</li>
+                    <li><code>services</code> pour la logique métier.</li>
+                    <li><code>repositories</code> pour l’accès aux données.</li>
+                </ul>
+            </li>
+        </ul>
+        <p class="small">Tu peux enrichir chaque diapo avec d’autres extraits de ton code réel (par ex. les controllers ou services) en copiant/collant dans ce fichier.</p>
+    </section>
+
+    <div class="footer">
+        <div id="slide-indicator">Diapo 1 / 18</div>
+        <div class="nav-buttons">
+            <button class="nav-button" id="prev-btn">&larr; Précédent</button>
+            <button class="nav-button" id="next-btn">Suivant &rarr;</button>
+        </div>
+        <div>Projet Spring "boutique"</div>
+    </div>
+</div>
+
+<script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const indicator = document.getElementById('slide-indicator');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    let current = 0;
+
+    function showSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+        slides[current].classList.remove('active');
+        current = index;
+        slides[current].classList.add('active');
+        indicator.textContent = `Diapo ${current + 1} / ${slides.length}`;
+    }
+
+    prevBtn.addEventListener('click', () => {
+        showSlide(current - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        showSlide(current + 1);
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+            showSlide(current + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            showSlide(current - 1);
+        }
+    });
+</script>
+
+</body>
+</html>
+
